@@ -24,6 +24,19 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		CA266A8619D1FECD004B8CF3 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		CA266A4B19D1D62D004B8CF3 /* YOW.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YOW.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CA266A4F19D1D62D004B8CF3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -119,6 +132,7 @@
 				CA266A4719D1D62D004B8CF3 /* Sources */,
 				CA266A4819D1D62D004B8CF3 /* Frameworks */,
 				CA266A4919D1D62D004B8CF3 /* Resources */,
+				CA266A8619D1FECD004B8CF3 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -393,6 +407,7 @@
 				CA266A6C19D1D62D004B8CF3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		CA266A6D19D1D62D004B8CF3 /* Build configuration list for PBXNativeTarget "YOWTests" */ = {
 			isa = XCConfigurationList;
@@ -401,6 +416,7 @@
 				CA266A6F19D1D62D004B8CF3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

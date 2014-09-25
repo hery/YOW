@@ -13,6 +13,8 @@ import MobileCoreServices // for kUTTypeImage
 
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIAlertViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
+    let countDownInitialValue = 2;
+    
     var tableView: UITableView?
     var swifter: Swifter
     
@@ -23,7 +25,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
         self.swifter = Swifter(consumerKey: "EkPgKMGXFuf06hYNh4xJxzOKr", consumerSecret: "NFT2KaEaMOQzsVdkx7GyhDp80suDvPSKBpkrhwW5hdcrGDRqwA")
-        self.countDownTimer = 1
+        self.countDownTimer = countDownInitialValue
         self.countDownLabel = UILabel(frame: UIScreen.mainScreen().bounds)
         self.cameraUI = UIImagePickerController()
         super.init(nibName:nil, bundle:nil)
@@ -94,6 +96,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             self.cameraUI.allowsEditing = false
             self.cameraUI.showsCameraControls = false
             self.cameraUI.delegate = self
+            self.cameraUI.cameraDevice = UIImagePickerControllerCameraDevice.Front
             
             self.countDownLabel.text = String(self.countDownTimer)
             self.countDownLabel.textColor = UIColor.whiteColor()
@@ -116,7 +119,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             self.countDownNSTimer?.invalidate()
             self.countDownLabel.text = ":)"
             self.cameraUI.takePicture()
-            self.countDownTimer = 1
+            self.countDownTimer = countDownInitialValue
         } else {
             NSLog("Countdown is now \(self.countDownTimer)!")
             self.countDownLabel.text = String(countDownTimer)
@@ -126,6 +129,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     func imagePickerController(picker: UIImagePickerController!, didFinishPickingImage image: UIImage!, editingInfo: [NSObject : AnyObject]!) {
             NSLog("Got image \(image)!")
+        UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil) // Should tweet picture as well
             self.dismissViewControllerAnimated(true, completion: { () -> Void in
         })
     }

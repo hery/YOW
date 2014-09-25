@@ -16,17 +16,23 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     var tableView: UITableView?
     var swifter: Swifter
     
+    var cameraUI: UIImagePickerController
+    var countDownTimer:Int
+    var countDownLabel:UILabel
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
         self.swifter = Swifter(consumerKey: "EkPgKMGXFuf06hYNh4xJxzOKr", consumerSecret: "NFT2KaEaMOQzsVdkx7GyhDp80suDvPSKBpkrhwW5hdcrGDRqwA")
-        NSLog("Initialized Swifter as \(swifter)")
+        self.countDownTimer = 1
+        self.countDownLabel = UILabel(frame: UIScreen.mainScreen().bounds)
+        self.cameraUI = UIImagePickerController()
         super.init(nibName:nil, bundle:nil)
+        NSLog("Initialized Swifter as \(swifter)")
     }
 
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         NSLog("Loaded ViewController!")
@@ -82,12 +88,33 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             let errorAlertView = UIAlertView(title: "Whoops", message: "Camera not available!", delegate:self, cancelButtonTitle:"Back", otherButtonTitles:"Double Back")
         } else {
             NSLog("Camera is available. Presenting UI...")
-            var cameraUI = UIImagePickerController()
-            cameraUI.sourceType = UIImagePickerControllerSourceType.Camera
-            cameraUI.mediaTypes = NSArray(object: kUTTypeImage)
-            cameraUI.allowsEditing = false
-            cameraUI.delegate = self
-            self.presentViewController(cameraUI, animated:false, completion:nil)
+            self.cameraUI.sourceType = UIImagePickerControllerSourceType.Camera
+            self.cameraUI.mediaTypes = NSArray(object: kUTTypeImage)
+            self.cameraUI.allowsEditing = false
+            self.cameraUI.showsCameraControls = false
+            self.cameraUI.delegate = self
+            
+            self.countDownLabel.text = String(self.countDownTimer)
+            self.countDownLabel.textColor = UIColor.whiteColor()
+            self.countDownLabel.textAlignment = NSTextAlignment.Center
+            self.countDownLabel.font = UIFont(name: "HelveticaNeue-Thin", size: 200)
+            
+            self.cameraUI.cameraOverlayView?.addSubview(self.countDownLabel)
+            self.cameraUI.cameraViewTransform = CGAffineTransformMakeScale(2, 2)
+            
+            self.presentViewController(self.cameraUI, animated:true, completion: { () -> Void in
+                NSLog("Presented camera UI!")
+                NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: Selector("countDown"), userInfo: nil, repeats: true)
+            })
         }
+    }
+    
+    func countDown() {
+        NSLog("Countdown is now \(self.countDownTimer)!")
+        self.countDownTimer--
+    }
+    
+    func imagePickerController(picker: UIImagePickerController!, didFinishPickingImage image: UIImage!, editingInfo: [NSObject : AnyObject]!) {
+        NSLog("Got image \(image)!")
     }
 }

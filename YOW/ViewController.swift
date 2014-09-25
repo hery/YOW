@@ -17,6 +17,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     var swifter: Swifter
     
     var cameraUI: UIImagePickerController
+    var countDownNSTimer:NSTimer?
     var countDownTimer:Int
     var countDownLabel:UILabel
     
@@ -104,17 +105,28 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             
             self.presentViewController(self.cameraUI, animated:true, completion: { () -> Void in
                 NSLog("Presented camera UI!")
-                NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: Selector("countDown"), userInfo: nil, repeats: true)
+                self.countDownNSTimer = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: Selector("countDown"), userInfo: nil, repeats: true)
             })
         }
     }
     
     func countDown() {
-        NSLog("Countdown is now \(self.countDownTimer)!")
-        self.countDownTimer--
+        if self.countDownTimer == -1 {
+            NSLog("Timer is 0. Picture time!")
+            self.countDownNSTimer?.invalidate()
+            self.countDownLabel.text = ":)"
+            self.cameraUI.takePicture()
+            self.countDownTimer = 1
+        } else {
+            NSLog("Countdown is now \(self.countDownTimer)!")
+            self.countDownLabel.text = String(countDownTimer)
+            self.countDownTimer--
+        }
     }
     
     func imagePickerController(picker: UIImagePickerController!, didFinishPickingImage image: UIImage!, editingInfo: [NSObject : AnyObject]!) {
-        NSLog("Got image \(image)!")
+            NSLog("Got image \(image)!")
+            self.dismissViewControllerAnimated(true, completion: { () -> Void in
+        })
     }
 }

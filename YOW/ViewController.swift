@@ -7,10 +7,25 @@
 //
 
 import UIKit
+import Accounts
+import SwifteriOS
+import MobileCoreServices // for kUTTypeImage
 
-class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIAlertViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
     var tableView: UITableView?
+    var swifter: Swifter
+    
+    
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
+        self.swifter = Swifter(consumerKey: "EkPgKMGXFuf06hYNh4xJxzOKr", consumerSecret: "NFT2KaEaMOQzsVdkx7GyhDp80suDvPSKBpkrhwW5hdcrGDRqwA")
+        NSLog("Initialized Swifter as \(swifter)")
+        super.init(nibName:nil, bundle:nil)
+    }
+
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,6 +36,17 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         tableView!.dataSource = self;
         tableView!.registerClass(UITableViewCell.self, forCellReuseIdentifier:"cell")
         self.view.addSubview(tableView!)
+        
+        let accountStore = ACAccountStore()
+        let accountType = accountStore.accountTypeWithAccountTypeIdentifier(ACAccountTypeIdentifierTwitter)
+        accountStore.requestAccessToAccountsWithType(accountType, options:nil) { (granted, error) -> Void in
+            if granted {
+                let twitterAccounts = accountStore.accountsWithAccountType(accountType)
+                let twitterAccount = twitterAccounts.last as ACAccount
+                NSLog("Got Twitter account: \(twitterAccount)")
+                self.swifter = Swifter(account: twitterAccount)
+            }
+        }
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -47,6 +73,21 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return (UIScreen.mainScreen().bounds.height-UIApplication.sharedApplication().statusBarFrame.height) / 9
+        return (UIScreen.mainScreen().bounds.height - UIApplication.sharedApplication().statusBarFrame.height) / 9
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        NSLog("Hit checkpoint \(indexPath.row+1)")
+        if !UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera) {
+            let errorAlertView = UIAlertView(title: "Whoops", message: "Camera not available!", delegate:self, cancelButtonTitle:"Back", otherButtonTitles:"Double Back")
+        } else {
+            NSLog("Camera is available. Presenting UI...")
+            var cameraUI = UIImagePickerController()
+            cameraUI.sourceType = UIImagePickerControllerSourceType.Camera
+            cameraUI.mediaTypes = NSArray(object: kUTTypeImage)
+            cameraUI.allowsEditing = false
+            cameraUI.delegate = self
+            self.presentViewController(cameraUI, animated:false, completion:nil)
+        }
     }
 }

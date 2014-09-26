@@ -82,6 +82,13 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell:UICollectionViewCell = collectionView.dequeueReusableCellWithReuseIdentifier("cell", forIndexPath: indexPath) as UICollectionViewCell
         cell.contentView.backgroundColor = UIColor.blackColor()
+        
+        let numberLabel = UILabel(frame: cell.bounds)
+        numberLabel.text = "\(indexPath.row + 1)"
+        numberLabel.font = UIFont(name: "HelveticaNeue-Thin", size: 100)
+        numberLabel.textColor = UIColor.whiteColor()
+        numberLabel.textAlignment = NSTextAlignment.Center
+        cell.addSubview(numberLabel)
         return cell
     }
     

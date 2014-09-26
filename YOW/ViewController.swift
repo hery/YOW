@@ -22,12 +22,14 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     var countDownNSTimer:NSTimer?
     var countDownTimer:Int
     var countDownLabel:UILabel
+    var messageContent:String
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
         self.swifter = Swifter(consumerKey: "EkPgKMGXFuf06hYNh4xJxzOKr", consumerSecret: "NFT2KaEaMOQzsVdkx7GyhDp80suDvPSKBpkrhwW5hdcrGDRqwA")
         self.countDownTimer = countDownInitialValue
         self.countDownLabel = UILabel(frame: UIScreen.mainScreen().bounds)
         self.cameraUI = UIImagePickerController()
+        self.messageContent = "initial content" // ##todo
         super.init(nibName:nil, bundle:nil)
         NSLog("Initialized Swifter as \(swifter)")
     }
@@ -128,9 +130,24 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     func imagePickerController(picker: UIImagePickerController!, didFinishPickingImage image: UIImage!, editingInfo: [NSObject : AnyObject]!) {
-            NSLog("Got image \(image)!")
+        NSLog("Got image \(image)!")
         UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil) // Should tweet picture as well
-            self.dismissViewControllerAnimated(true, completion: { () -> Void in
-        })
+        postToTwitter(image)
+        postToInstagram(image)
+        self.dismissViewControllerAnimated(true, completion:nil)
+    }
+    
+    func postToTwitter(image: UIImage!) {
+        NSLog("Posting to Twitter...")
+        let imageData = UIImageJPEGRepresentation(image, 1.0)
+        self.swifter.postStatusUpdate("prout", media:imageData, inReplyToStatusID: nil, lat: nil, long: nil, placeID: nil, displayCoordinates: nil, trimUser: nil, success: { (status) -> Void in
+            NSLog("\(status)")
+        }) { (error) -> Void in
+            NSLog("\(error)")
+        }
+    }
+    
+    func postToInstagram(image: UIImage!) {
+        NSLog("Posting to Instagram...")
     }
 }

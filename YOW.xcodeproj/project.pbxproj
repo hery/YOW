@@ -10,7 +10,7 @@
 		6F7A4862504043CC9E731083 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0095B8224A334295B1B88C05 /* libPods.a */; };
 		CA266A5119D1D62D004B8CF3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA266A5019D1D62D004B8CF3 /* AppDelegate.swift */; };
 		CA266A5319D1D62D004B8CF3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA266A5219D1D62D004B8CF3 /* ViewController.swift */; };
-		CA266A5819D1D62D004B8CF3 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CA266A5719D1D62D004B8CF3 /* Images.xcassets */; };
+		CA266A5819D1D62D004B8CF3 /* YOWImages.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CA266A5719D1D62D004B8CF3 /* YOWImages.xcassets */; };
 		CA266A5B19D1D62D004B8CF3 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = CA266A5919D1D62D004B8CF3 /* LaunchScreen.xib */; };
 		CA266A6719D1D62D004B8CF3 /* YOWTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA266A6619D1D62D004B8CF3 /* YOWTests.swift */; };
 		CAB5B54119D5C91D0033F79B /* SwifteriOS.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = CAB5B53919D5C9040033F79B /* SwifteriOS.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -89,7 +89,7 @@
 		CA266A4F19D1D62D004B8CF3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CA266A5019D1D62D004B8CF3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CA266A5219D1D62D004B8CF3 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		CA266A5719D1D62D004B8CF3 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		CA266A5719D1D62D004B8CF3 /* YOWImages.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = YOWImages.xcassets; sourceTree = "<group>"; };
 		CA266A5A19D1D62D004B8CF3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		CA266A6019D1D62D004B8CF3 /* YOWTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = YOWTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CA266A6519D1D62D004B8CF3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -142,7 +142,7 @@
 			children = (
 				CA266A5019D1D62D004B8CF3 /* AppDelegate.swift */,
 				CA266A5219D1D62D004B8CF3 /* ViewController.swift */,
-				CA266A5719D1D62D004B8CF3 /* Images.xcassets */,
+				CA266A5719D1D62D004B8CF3 /* YOWImages.xcassets */,
 				CA266A5919D1D62D004B8CF3 /* LaunchScreen.xib */,
 				CA266A4E19D1D62D004B8CF3 /* Supporting Files */,
 			);
@@ -325,7 +325,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CA266A5B19D1D62D004B8CF3 /* LaunchScreen.xib in Resources */,
-				CA266A5819D1D62D004B8CF3 /* Images.xcassets in Resources */,
+				CA266A5819D1D62D004B8CF3 /* YOWImages.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -498,6 +498,7 @@
 			baseConfigurationReference = CA98F89E2BFC42C5B61A010F /* Pods.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -514,6 +515,7 @@
 			baseConfigurationReference = CA98F89E2BFC42C5B61A010F /* Pods.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",

@@ -49,7 +49,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         flowLayout.itemSize = CGSizeMake(UIScreen.mainScreen().bounds.width/3, UIScreen.mainScreen().bounds.height/3)
         
         collectionView = UICollectionView(frame: UIScreen.mainScreen().bounds, collectionViewLayout: flowLayout)
-        collectionView!.backgroundColor = UIColor.redColor()
+        collectionView!.backgroundColor = UIColor.blackColor()
         collectionView!.delegate = self;
         collectionView!.dataSource = self;
         collectionView!.registerClass(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
@@ -85,14 +85,14 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         
         let numberLabel = UILabel(frame: cell.bounds)
         numberLabel.text = "\(indexPath.row + 1)"
-        numberLabel.font = UIFont(name: "HelveticaNeue-Thin", size: 100)
+        numberLabel.font = UIFont(name: "HelveticaNeue-UltraLight", size: 300)
         numberLabel.textColor = UIColor.whiteColor()
         numberLabel.textAlignment = NSTextAlignment.Center
         cell.addSubview(numberLabel)
         return cell
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         NSLog("Hit checkpoint \(indexPath.row+1)")
         if !UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera) {
             let errorAlertView = UIAlertView(title: "Whoops", message: "Camera not available!", delegate:self, cancelButtonTitle:"Back", otherButtonTitles:"Double Back")
@@ -108,12 +108,12 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             self.countDownLabel.text = String(self.countDownTimer)
             self.countDownLabel.textColor = UIColor.whiteColor()
             self.countDownLabel.textAlignment = NSTextAlignment.Center
-            self.countDownLabel.font = UIFont(name: "HelveticaNeue-Thin", size: 200)
+            self.countDownLabel.font = UIFont(name: "HelveticaNeue-Light", size: 200)
             
             self.cameraUI.cameraOverlayView?.addSubview(self.countDownLabel)
             self.cameraUI.cameraViewTransform = CGAffineTransformMakeScale(2, 2)
             
-//            self.messageContent = "Hit checkpoint #\(indexPath.row+1)! #YOW @paragonsports"
+            //            self.messageContent = "Hit checkpoint #\(indexPath.row+1)! #YOW @paragonsports"
             self.messageContent = "Hit checkpoint #\(indexPath.row+1)!"
             
             self.presentViewController(self.cameraUI, animated:false, completion: { () -> Void in
@@ -121,6 +121,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
                 self.countDownNSTimer = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: Selector("countDown"), userInfo: nil, repeats: true)
             })
         }
+
     }
     
     func countDown() {

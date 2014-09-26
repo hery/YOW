@@ -22,14 +22,13 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     var countDownNSTimer:NSTimer?
     var countDownTimer:Int
     var countDownLabel:UILabel
-    var messageContent:String
+    var messageContent:String?
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
         self.swifter = Swifter(consumerKey: "EkPgKMGXFuf06hYNh4xJxzOKr", consumerSecret: "NFT2KaEaMOQzsVdkx7GyhDp80suDvPSKBpkrhwW5hdcrGDRqwA")
         self.countDownTimer = countDownInitialValue
         self.countDownLabel = UILabel(frame: UIScreen.mainScreen().bounds)
         self.cameraUI = UIImagePickerController()
-        self.messageContent = "initial content" // ##todo
         super.init(nibName:nil, bundle:nil)
         NSLog("Initialized Swifter as \(swifter)")
     }
@@ -108,6 +107,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             self.cameraUI.cameraOverlayView?.addSubview(self.countDownLabel)
             self.cameraUI.cameraViewTransform = CGAffineTransformMakeScale(2, 2)
             
+            self.messageContent = "Hit checkpoint #\(indexPath.row+1)! #YOW @paragonsports"
+            
             self.presentViewController(self.cameraUI, animated:true, completion: { () -> Void in
                 NSLog("Presented camera UI!")
                 self.countDownNSTimer = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: Selector("countDown"), userInfo: nil, repeats: true)
@@ -140,7 +141,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     func postToTwitter(image: UIImage!) {
         NSLog("Posting to Twitter...")
         let imageData = UIImageJPEGRepresentation(image, 1.0)
-        self.swifter.postStatusUpdate("prout", media:imageData, inReplyToStatusID: nil, lat: nil, long: nil, placeID: nil, displayCoordinates: nil, trimUser: nil, success: { (status) -> Void in
+        self.swifter.postStatusUpdate(self.messageContent!, media:imageData, inReplyToStatusID: nil, lat: nil, long: nil, placeID: nil, displayCoordinates: nil, trimUser: nil, success: { (status) -> Void in
             NSLog("\(status)")
         }) { (error) -> Void in
             NSLog("\(error)")

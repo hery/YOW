@@ -11,11 +11,11 @@ import Accounts
 import SwifteriOS
 import MobileCoreServices // for kUTTypeImage
 
-class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIAlertViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class ViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UIAlertViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
-    let countDownInitialValue = 2;
+    let countDownInitialValue = 1;
     
-    var tableView: UITableView?
+    var collectionView: UICollectionView?
     var swifter: Swifter
     
     var cameraUI: UIImagePickerController
@@ -41,11 +41,22 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         super.viewDidLoad()
         NSLog("Loaded ViewController!")
         // Do any additional setup after loading the view, typically from a nib.
-        tableView = UITableView(frame: UIScreen.mainScreen().bounds)
-        tableView!.delegate = self;
-        tableView!.dataSource = self;
-        tableView!.registerClass(UITableViewCell.self, forCellReuseIdentifier:"cell")
-        self.view.addSubview(tableView!)
+        
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.minimumInteritemSpacing = 0;
+        flowLayout.minimumLineSpacing = 0;
+        flowLayout.sectionInset = UIEdgeInsetsMake(0, 0, 0, 0)
+        flowLayout.itemSize = CGSizeMake(UIScreen.mainScreen().bounds.width/3, UIScreen.mainScreen().bounds.height/3)
+        
+        collectionView = UICollectionView(frame: UIScreen.mainScreen().bounds, collectionViewLayout: flowLayout)
+        collectionView!.backgroundColor = UIColor.redColor()
+        collectionView!.delegate = self;
+        collectionView!.dataSource = self;
+        collectionView!.registerClass(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+        
+
+        
+        self.view.addSubview(collectionView!)
         
         let accountStore = ACAccountStore()
         let accountType = accountStore.accountTypeWithAccountTypeIdentifier(ACAccountTypeIdentifierTwitter)
@@ -59,31 +70,19 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
     }
     
-    override func viewDidAppear(animated: Bool) {
-        tableView!.contentOffset = CGPoint(x: 0, y: -UIApplication.sharedApplication().statusBarFrame.height)
-    }
-
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 1
-    }
-    
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell:UITableViewCell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as UITableViewCell
-        cell.textLabel?.text = "Checkpoint \(indexPath.row+1)"
-        return cell
-    }
-    
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 9
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return (UIScreen.mainScreen().bounds.height - UIApplication.sharedApplication().statusBarFrame.height) / 9
+    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+        let cell:UICollectionViewCell = collectionView.dequeueReusableCellWithReuseIdentifier("cell", forIndexPath: indexPath) as UICollectionViewCell
+        cell.contentView.backgroundColor = UIColor.blackColor()
+        return cell
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
@@ -107,9 +106,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             self.cameraUI.cameraOverlayView?.addSubview(self.countDownLabel)
             self.cameraUI.cameraViewTransform = CGAffineTransformMakeScale(2, 2)
             
-            self.messageContent = "Hit checkpoint #\(indexPath.row+1)! #YOW @paragonsports"
+//            self.messageContent = "Hit checkpoint #\(indexPath.row+1)! #YOW @paragonsports"
+            self.messageContent = "Hit checkpoint #\(indexPath.row+1)!"
             
-            self.presentViewController(self.cameraUI, animated:true, completion: { () -> Void in
+            self.presentViewController(self.cameraUI, animated:false, completion: { () -> Void in
                 NSLog("Presented camera UI!")
                 self.countDownNSTimer = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: Selector("countDown"), userInfo: nil, repeats: true)
             })

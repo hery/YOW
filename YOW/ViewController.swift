@@ -63,7 +63,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         accountStore.requestAccessToAccountsWithType(accountType, options:nil) { (granted, error) -> Void in
             if granted {
                 let twitterAccounts = accountStore.accountsWithAccountType(accountType)
-                let twitterAccount = twitterAccounts.last as ACAccount
+                let twitterAccount = twitterAccounts.last as! ACAccount
                 NSLog("Got Twitter account: \(twitterAccount)")
                 self.swifter = Swifter(account: twitterAccount)
             }
@@ -80,7 +80,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell:UICollectionViewCell = collectionView.dequeueReusableCellWithReuseIdentifier("cell", forIndexPath: indexPath) as UICollectionViewCell
+        let cell:UICollectionViewCell = collectionView.dequeueReusableCellWithReuseIdentifier("cell", forIndexPath: indexPath) as! UICollectionViewCell
         cell.contentView.backgroundColor = UIColor.blackColor()
         
         let numberLabel = UILabel(frame: cell.bounds)
@@ -99,7 +99,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         } else {
             NSLog("Camera is available. Presenting UI...")
             self.cameraUI.sourceType = UIImagePickerControllerSourceType.Camera
-            self.cameraUI.mediaTypes = NSArray(object: kUTTypeImage)
+            self.cameraUI.mediaTypes = NSArray(object: kUTTypeImage) as [AnyObject]
             self.cameraUI.allowsEditing = false
             self.cameraUI.showsCameraControls = false
             self.cameraUI.delegate = self

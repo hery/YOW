@@ -9,11 +9,29 @@
 import UIKit
 import Accounts
 import SwifteriOS
+import CoreLocation
 import MobileCoreServices // for kUTTypeImage
 
-class ViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UIAlertViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class ViewController: UIViewController,
+    UICollectionViewDelegate,
+    UICollectionViewDataSource,
+    UIAlertViewDelegate,
+    UIImagePickerControllerDelegate,
+    UINavigationControllerDelegate,
+    CLLocationManagerDelegate {
 
     let countDownInitialValue = 1;
+    let quotes = [
+        "Let's get rolling!",
+        "What a nice day!",
+        "Here we go!",
+        "Cruising!",
+        "Where's the party at?",
+        "Almost there!",
+        "Not even tired!",
+        "I can see the finish line!",
+        "Oh, hello!"
+    ]
     
     var collectionView: UICollectionView?
     var swifter: Swifter
@@ -24,13 +42,17 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     var countDownLabel:UILabel
     var messageContent:String?
     
+    var locationManager: CLLocationManager!
+    var currentLocationCoordinates = CLLocationCoordinate2D()
+
+    
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
         self.swifter = Swifter(consumerKey: "EkPgKMGXFuf06hYNh4xJxzOKr", consumerSecret: "NFT2KaEaMOQzsVdkx7GyhDp80suDvPSKBpkrhwW5hdcrGDRqwA")
         self.countDownTimer = countDownInitialValue
         self.countDownLabel = UILabel(frame: UIScreen.mainScreen().bounds)
         self.cameraUI = UIImagePickerController()
+        self.locationManager = CLLocationManager()
         super.init(nibName:nil, bundle:nil)
-        NSLog("Initialized Swifter as \(swifter)")
     }
 
     required init(coder aDecoder: NSCoder) {
@@ -54,8 +76,6 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         collectionView!.dataSource = self;
         collectionView!.registerClass(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
         
-
-        
         self.view.addSubview(collectionView!)
         
         let accountStore = ACAccountStore()
@@ -68,11 +88,24 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
                 self.swifter = Swifter(account: twitterAccount)
             }
         }
+        
+        println("Setting up location manager \(locationManager)")
+        self.locationManager.delegate = self
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        self.locationManager.requestAlwaysAuthorization()
+        self.locationManager.startUpdatingLocation()
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
+        let locationArray = locations as! [CLLocation]
+        let location = locationArray[0]
+        let coordinates = location.coordinate
+        self.currentLocationCoordinates = coordinates
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -113,8 +146,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             self.cameraUI.cameraOverlayView?.addSubview(self.countDownLabel)
             self.cameraUI.cameraViewTransform = CGAffineTransformMakeScale(2, 2)
             
-            //            self.messageContent = "Hit checkpoint #\(indexPath.row+1)! #YOW @paragonsports"
-            self.messageContent = "Hit checkpoint #\(indexPath.row+1)!"
+            self.messageContent = "\(indexPath.row+1) down! \(quotes[indexPath.row]) #YOW @paragonsports"
             
             self.presentViewController(self.cameraUI, animated:false, completion: { () -> Void in
                 NSLog("Presented camera UI!")
@@ -149,7 +181,12 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     func postToTwitter(image: UIImage!) {
         NSLog("Posting to Twitter...")
         let imageData = UIImageJPEGRepresentation(image, 1.0)
-        self.swifter.postStatusUpdate(self.messageContent!, media:imageData, inReplyToStatusID: nil, lat: nil, long: nil, placeID: nil, displayCoordinates: nil, trimUser: nil, success: { (status) -> Void in
+        self.swifter.postStatusUpdate(self.messageContent!, media:imageData,
+            inReplyToStatusID: nil,
+            lat: self.currentLocationCoordinates.latitude,
+            long: self.currentLocationCoordinates.longitude,
+            placeID: nil,
+            displayCoordinates: true, trimUser: nil, success: { (status) -> Void in
             NSLog("\(status)")
         }) { (error) -> Void in
             NSLog("\(error)")
